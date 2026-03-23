@@ -1,0 +1,32 @@
+{
+  "name": "chartmaker",
+  "version": "2.0.0",
+  "exports": "./mod.ts",
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "start": "deno run -A mod.ts",
+    "compile": "deno compile -A --output chartmaker mod.ts",
+    "generate:all": "deno run -A mod.ts generate --all",
+    "list:charts": "deno run -A mod.ts list charts",
+    "info": "deno run -A mod.ts info"
+  },
+  "imports": {
+    "@std/cli/": "jsr:@std/cli@^1/",
+    "@std/cli": "jsr:@std/cli@^1",
+    "@std/path": "jsr:@std/path@^1",
+    "@std/path/": "jsr:@std/path@^1/",
+    "@std/fs": "jsr:@std/fs@^1",
+    "@std/fs/": "jsr:@std/fs@^1/",
+    "@std/io": "jsr:@std/io@^0",
+    "@std/io/": "jsr:@std/io@^0/",
+    "@db/sqlite": "jsr:@db/sqlite@^0",
+    "fflate": "npm:fflate@^0.8",
+    "sharp": "npm:sharp@^0.33"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "allowScripts": ["npm:sharp@0.33.5"]
+}

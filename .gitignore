@@ -1,11 +1,24 @@
+# IDE
+.vscode/
+.idea/
 
-**/.vscode
-**/node_modules
-**/workarea*
-**/chartcache
-**/mbutil
-**/tiledatabases
-**/charts
-**/appimages
-/debug.log
+# Deno
+node_modules/
+deno.lock
 
+# Build artifacts
+workarea*/
+chartcache/
+output/
+tiledatabases/
+charts/
+appimages/
+
+# Logs
+*.log
+debug.log
+chartmaker.log
+
+# Compiled binary
+chartmaker
+chartmaker.exe
