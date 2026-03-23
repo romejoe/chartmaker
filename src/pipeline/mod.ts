@@ -122,16 +122,18 @@ function buildMetadata(
   };
 
   // Add bounds if available
-  if (bounds && bounds.length >= 3) {
+  if (bounds && bounds.length >= 1) {
     try {
-      const lngDiff =
-        (Math.abs(bounds[0][0]) - Math.abs(bounds[2][0])) / 2;
-      const latDiff =
-        (Math.abs(bounds[0][1]) - Math.abs(bounds[2][1])) / 2;
-      const centerLng = bounds[0][0] + lngDiff;
-      const centerLat = bounds[0][1] - latDiff;
+      const lons = bounds.map((p) => p[0]);
+      const lats = bounds.map((p) => p[1]);
+      const minLon = Math.min(...lons);
+      const maxLon = Math.max(...lons);
+      const minLat = Math.min(...lats);
+      const maxLat = Math.max(...lats);
+      const centerLng = (minLon + maxLon) / 2;
+      const centerLat = (minLat + maxLat) / 2;
 
-      meta.bounds = `${bounds[0][0]},${bounds[0][1]},${bounds[2][0]},${bounds[2][1]}`;
+      meta.bounds = `${minLon},${minLat},${maxLon},${maxLat}`;
       meta.center = `${centerLng},${centerLat},${options.centerZoomLevel}`;
     } catch {
       log.debug("Could not calculate bounds for metadata");

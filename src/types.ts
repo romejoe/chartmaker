@@ -108,6 +108,7 @@ export interface CliArgs {
   force: boolean;
   verbose: boolean;
   dryRun: boolean;
+  configPath?: string;
 }
 
 /** Settings loaded from settings.json. */

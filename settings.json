@@ -15,7 +15,7 @@
         "blendpixels" : 30,
         "zoomrange" : "5-11",
         "centerzoomlevel": "7",
-        "dbextension": "db",
+        "dbextension": "mbtiles",
         "defaultdbfolder": "public/charts",
         "addoverviews": true,
         "usecommandline": false,

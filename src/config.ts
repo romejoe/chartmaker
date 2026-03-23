@@ -38,7 +38,7 @@ const DEFAULTS: Settings = {
     cleanWorkarea: true,
     layerType: "baselayer",
     centerZoomLevel: "7",
-    dbExtension: "db",
+    dbExtension: "mbtiles",
     logToFile: false,
     timezone: "America/Chicago",
   },
@@ -78,17 +78,24 @@ interface RawSettings {
 
 /**
  * Load and validate settings from settings.json.
+ *
+ * Search order:
+ * 1. `configPath` if explicitly provided (warns on failure)
+ * 2. `settings.json` in the current working directory (silent fallback)
+ * 3. Embedded DEFAULTS
  */
-export function loadSettings(appDir: string): Settings {
-  const filePath = join(appDir, "settings.json");
+export function loadSettings(configPath?: string): Settings {
+  const explicit = configPath !== undefined;
+  const filePath = explicit ? configPath : join(Deno.cwd(), "settings.json");
   let raw: RawSettings;
 
   try {
     const text = Deno.readTextFileSync(filePath);
     raw = JSON.parse(text);
   } catch (e) {
-    log.warn(`Could not load settings.json: ${e instanceof Error ? e.message : e}`);
-    log.info("Using default settings.");
+    if (explicit) {
+      log.warn(`Could not load settings from ${filePath}: ${e instanceof Error ? e.message : e}`);
+    }
     return DEFAULTS;
   }
 

@@ -23,6 +23,9 @@ COMMANDS:
   list          List available charts or chart cycle dates
   info          Show current settings and active chart date
 
+GLOBAL OPTIONS:
+      --config <path>      Path to settings.json (default: ./settings.json)
+
 GENERATE OPTIONS:
   -c, --chart <name>      Chart to process (repeatable by name)
   -a, --all               Process all charts (full + area)
@@ -75,16 +78,31 @@ export function parseCli(args: string[]): CliArgs {
     Deno.exit(0);
   }
 
-  const command = args[0];
-  const restArgs = args.slice(1);
+  // Pre-scan for --config <path> and strip it from args before subcommand dispatch
+  let configPath: string | undefined;
+  const filteredArgs: string[] = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--config" && i + 1 < args.length) {
+      configPath = args[i + 1];
+      i++; // skip the value too
+    } else {
+      filteredArgs.push(args[i]);
+    }
+  }
 
+  const command = filteredArgs[0];
+  const restArgs = filteredArgs.slice(1);
+
+  let result: CliArgs;
   switch (command) {
     case "generate":
-      return parseGenerateArgs(restArgs);
+      result = parseGenerateArgs(restArgs);
+      break;
     case "list":
-      return parseListArgs(restArgs);
+      result = parseListArgs(restArgs);
+      break;
     case "info":
-      return {
+      result = {
         command: "info",
         charts: [],
         all: false,
@@ -97,11 +115,17 @@ export function parseCli(args: string[]): CliArgs {
         verbose: false,
         dryRun: false,
       };
+      break;
     default:
       console.error(`Unknown command: "${command}"\n`);
       printHelp();
       Deno.exit(2);
   }
+
+  if (configPath) {
+    result.configPath = configPath;
+  }
+  return result;
 }
 
 function parseGenerateArgs(args: string[]): CliArgs {

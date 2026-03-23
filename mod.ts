@@ -31,7 +31,7 @@ async function main(): Promise<void> {
   const args = parseCli(Deno.args);
 
   // Load settings
-  const settings = loadSettings(appDir);
+  const settings = loadSettings(args.configPath);
 
   // Set log level based on verbose flag
   if (args.verbose) {
